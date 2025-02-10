@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,9 +14,12 @@ const firebaseConfig = {
   storageBucket: "pc-shop-portfolio.firebasestorage.app",
   messagingSenderId: "947838420993",
   appId: "1:947838420993:web:8e6d7539ae3b2049ac5800",
-  measurementId: "G-FR6459JH2N"
+  measurementId: "G-FR6459JH2N",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+export const auth = getAuth(app);
+export default app;

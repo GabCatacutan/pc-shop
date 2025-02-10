@@ -1,14 +1,13 @@
-import { StrictMode } from "react";
+import { StrictMode, createContext } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import ProductListPage from "./pages/ProductListPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
-import CustomerNavBar from "./components/CustomerNavBar.tsx";
-import CustomerHeader from "./components/CustomerHeader.tsx";
-import './index.css'
 import LoginPage from "./pages/LoginPage.tsx";
-
+import "./index.css";
+import App from "./App.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -21,16 +20,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LoginPage></LoginPage>
+    element: <LoginPage></LoginPage>,
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <AuthProvider>
       <link href="/src/styles.css" rel="stylesheet"></link>
-    <CustomerHeader />
-    <CustomerNavBar />
-    {/* Insert Footer Here */}
-    <RouterProvider router={router}></RouterProvider>
+      <App></App>
+      <RouterProvider router={router}></RouterProvider>
+    </AuthProvider>
   </StrictMode>
 );
