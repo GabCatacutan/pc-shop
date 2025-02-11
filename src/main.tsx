@@ -1,6 +1,6 @@
 import { StrictMode, createContext } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import ProductListPage from "./pages/ProductListPage.tsx";
 import HomePage from "./pages/HomePage.tsx";

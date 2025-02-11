@@ -17,7 +17,6 @@ function CustomerNavBar() {
         <Button variant="text" href="/products">Storage</Button>
         <Button variant="text" href="/products">Power Supply</Button>
         <LoginComponent></LoginComponent>
-        {/* <Button variant="text" href="/login" className="float-right"><LoginIcon></LoginIcon>Login</Button> */}
       </nav>
     </>
   );

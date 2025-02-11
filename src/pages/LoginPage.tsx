@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { TextField, Button, Card, Tabs, Tab } from "@mui/material";;
+import { TextField, Button, Card, Tabs, Tab } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage: React.FC = () => {
-  const {handleLogin, handleSignUp} = useAuth();
+  const { handleLogin, handleSignUp } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [fullname, setFullName] = useState<string>("");
+  const [phonenumber, setPhoneNumber] = useState<string>("");
   const [tab, setTab] = useState<number>(0);
 
   const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,12 +20,10 @@ const LoginPage: React.FC = () => {
     }
   };
 
-
-
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await handleSignUp(email, password);
+      await handleSignUp(email, password, fullname, phonenumber);
       alert("Sign Up Successful");
     } catch (error: any) {
       alert(error.message);
@@ -33,7 +33,11 @@ const LoginPage: React.FC = () => {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <Card className="p-8 w-96 shadow-lg">
-        <Tabs value={tab} onChange={(_e, newValue: number) => setTab(newValue)} variant="fullWidth">
+        <Tabs
+          value={tab}
+          onChange={(_e, newValue: number) => setTab(newValue)}
+          variant="fullWidth"
+        >
           <Tab label="Login" />
           <Tab label="Sign Up" />
         </Tabs>
@@ -84,6 +88,22 @@ const LoginPage: React.FC = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              variant="outlined"
+              value={phonenumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Full Name"
+              variant="outlined"
+              value={fullname}
+              onChange={(e) => setFullName(e.target.value)}
               required
             />
             <Button fullWidth variant="contained" color="primary" type="submit">
