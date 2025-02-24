@@ -1,7 +1,4 @@
-import Button from '@mui/material/Button';
-import { useState } from 'react';
-import LoginIcon from '@mui/icons-material/Login';
-import {useAuth} from "../context/AuthContext"
+import Button from '@mui/material/Button'
 import LoginComponent from './LoginComponent';
 
 function CustomerNavBar() {
@@ -9,13 +6,13 @@ function CustomerNavBar() {
   return (
     <>
       <nav className="mx-3">
-        <Button variant="text" href="/products">PC Case</Button>
-        <Button variant="text" href="/products">Processors</Button>
-        <Button variant="text" href="/products">Motherboard</Button>
-        <Button variant="text" href="/products">Graphics Card</Button>
-        <Button variant="text" href="/products">Memory</Button>
-        <Button variant="text" href="/products">Storage</Button>
-        <Button variant="text" href="/products">Power Supply</Button>
+        <Button variant="text" href="/products?category=case">PC Case</Button>
+        <Button variant="text" href="/products?category=processor">Processors</Button>
+        <Button variant="text" href="/products?category=motherboard">Motherboard</Button>
+        <Button variant="text" href="/products?category=graphics-card">Graphics Card</Button>
+        <Button variant="text" href="/products?category=memory">Memory</Button>
+        <Button variant="text" href="/products?category=storage">Storage</Button>
+        <Button variant="text" href="/products?category=power-supply">Power Supply</Button>
         <LoginComponent></LoginComponent>
       </nav>
     </>

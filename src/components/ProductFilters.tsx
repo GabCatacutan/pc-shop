@@ -1,4 +1,4 @@
-import { Checkbox, FormControl, FormControlLabel, Slider } from "@mui/material";
+import { Checkbox, FormControlLabel, Slider } from "@mui/material";
 import * as React from "react";
 
 function valuetext(value: number) {

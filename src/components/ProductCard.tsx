@@ -1,11 +1,5 @@
 import { Button } from "@mui/material";
-import testImage from "../assets/product_icon.png";
-
-interface Product {
-  image: string;
-  name: string;
-  price: number;
-}
+import { Product } from "../common/types";
 
 function ProductCard(product: Product) {
   return (

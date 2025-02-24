@@ -1,12 +1,9 @@
 import { Button } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
-import {useAuth} from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext";
 
 function LoginComponent() {
-
-  const {user, handleLogout} = useAuth();
-
-  console.log(user)
+  const { user, handleLogout } = useAuth();
 
   if (!user) {
     return (
@@ -17,12 +14,13 @@ function LoginComponent() {
       </>
     );
   } else {
-    return(
+    return (
       <div className="float-right">
-
-        <Button onClick={handleLogout} href="/">Logout</Button>
+        <Button onClick={handleLogout}>
+          Logout
+        </Button>
       </div>
-    )
+    );
   }
 }
 

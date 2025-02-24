@@ -6,15 +6,8 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { auth, db } from "../config/firebase.ts";
-import {
-  User,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
-import {addDoc, collection} from "firebase/firestore"
+import supabase from "../config/supabase.ts";
+import { User } from "@supabase/supabase-js"; // Import User type from Supabase
 
 // Define context type
 interface AuthContextType {
@@ -22,7 +15,12 @@ interface AuthContextType {
   userDetails: Object | null;
   handleLogin: (email: string, password: string) => Promise<void>;
   handleLogout: () => Promise<void>;
-  handleSignUp: (email: string, password:string, phonenumber:string, fullname:string) => Promise<void>;
+  handleSignUp: (
+    email: string,
+    password: string,
+    phonenumber: string,
+    fullname: string
+  ) => Promise<void>;
   loading: boolean;
 }
 
@@ -41,59 +39,101 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [userDetails, setUserDetails] = useState<Object | null>(null);
 
   useEffect(() => {
-    // Listen for authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log("Auth event:", event, session);
 
-      setLoading(false);
-    });
+        if (session?.user) {
+          setUser(session.user);
+        } else {
+          setUser(null);
+        }
 
-    return () => unsubscribe();
+        setLoading(false);
+      }
+    );
+
+    // Cleanup subscription on unmount
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
   }, []);
 
   // Login function
-  const handleLogin = async (
-    email: string,
-    password: string
-  ): Promise<void> => {
-    try{
-        await signInWithEmailAndPassword(auth, email, password);
-        
-    } catch {
+  const handleLogin = async (email: string, password: string): Promise<void> => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
+      if (error) throw error;
+
+      if (data?.user) {
+        setUser(data.user);
+      }
+
+      alert("Login successful");
+    } catch (e: unknown) {
+      const error = e as Error;
+      alert(`Login Unsuccessful: ${error.message}`);
     }
-
   };
 
   // Logout function
   const handleLogout = async (): Promise<void> => {
-    await signOut(auth);
+    await supabase.auth.signOut()
+    await supabase.auth.refreshSession()
   };
 
+  // Signup function
   const handleSignUp = async (
     email: string,
     password: string,
     phonenumber: string,
-    fullname: string,
-  ): Promise<void>=> {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-    const user = userCredential.user
-    console.log("user_id", user.uid)
+    fullname: string
+  ): Promise<void> => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    const userData = {
-      uid: user.uid,
-      email: email,
-      fullname: fullname,
-      phonenumber:phonenumber,
+      if (error) throw error;
+
+      if (data.user) {
+        setUser(data.user); // Update user state immediately
+
+        // Insert additional user data into DB
+        // const { error: insertError } = await supabase.from("users").insert([
+        //   {
+        //     id: data.user.id,
+        //     email,
+        //     fullname,
+        //     phonenumber,
+        //   },
+        // ]);
+        // if(insertError){
+        //   throw insertError
+        // }
+      }
+    } catch (e: unknown) {
+      const error = e as Error;
+      console.error("Signup error:", error.message);
     }
-
-    console.log("userData", userData)
-    await addDoc(collection(db, 'users'), userData)
-
-  }
+  };
 
   return (
-    <AuthContext.Provider value={{ user, userDetails, handleLogin, handleSignUp, handleLogout, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        userDetails,
+        handleLogin,
+        handleSignUp,
+        handleLogout,
+        loading,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

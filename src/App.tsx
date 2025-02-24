@@ -1,7 +1,7 @@
+import { Outlet } from "react-router-dom";
 import CustomerHeader from "./components/CustomerHeader";
 import CustomerNavBar from "./components/CustomerNavBar";
 import { useContext } from "react";
-
 
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
     <>
         <CustomerHeader></CustomerHeader>
         <CustomerNavBar></CustomerNavBar>
+        <Outlet></Outlet>
     </>
   );
 }

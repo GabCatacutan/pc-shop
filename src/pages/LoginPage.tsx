@@ -14,7 +14,6 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     try {
       await handleLogin(email, password);
-      alert("Login Successful");
     } catch (error: any) {
       alert(error.message);
     }
