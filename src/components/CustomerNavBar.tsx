@@ -14,7 +14,7 @@ function CustomerNavBar() {
     setOpen(newOpen);
   };
 
-  const NavItems = (
+  const NavItemsMobile = (
     <Box className="flex">
       <Button variant="text" href="/products?category=case">PC Case</Button>
       <Button variant="text" href="/products?category=processor">Processors</Button>
@@ -23,7 +23,20 @@ function CustomerNavBar() {
       <Button variant="text" href="/products?category=memory">Memory</Button>
       <Button variant="text" href="/products?category=storage">Storage</Button>
       <Button variant="text" href="/products?category=power-supply">Power Supply</Button>
-      <LoginComponent />
+      <div className="justify-end"><LoginComponent/></div>
+    </Box>
+  );
+
+  const NavItemsDesktop = (
+    <Box className="flex">
+      <Button variant="text" href="/products?category=case">PC Case</Button>
+      <Button variant="text" href="/products?category=processor">Processors</Button>
+      <Button variant="text" href="/products?category=motherboard">Motherboard</Button>
+      <Button variant="text" href="/products?category=graphics-card">Graphics Card</Button>
+      <Button variant="text" href="/products?category=memory">Memory</Button>
+      <Button variant="text" href="/products?category=storage">Storage</Button>
+      <Button variant="text" href="/products?category=power-supply">Power Supply</Button>
+      <div className="justify-end"><LoginComponent/></div>
     </Box>
   );
 
@@ -33,11 +46,11 @@ function CustomerNavBar() {
         <>
           <Button onClick={toggleDrawer(true)}><MenuIcon /></Button>
           <Drawer open={open} onClose={toggleDrawer(false)}>
-            {NavItems}
+            {NavItemsMobile}
           </Drawer>
         </>
       ) : (
-        NavItems
+        NavItemsDesktop
       )}
     </nav>
   );
