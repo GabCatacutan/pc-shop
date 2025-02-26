@@ -2,10 +2,11 @@ import { Outlet } from "react-router-dom";
 import CustomerHeader from "./components/CustomerHeader";
 import CustomerNavBar from "./components/CustomerNavBar";
 import { useContext } from "react";
+import { NavBarProps } from "./common/types";
 
 //INSERT NAVBAR ITEMS FETCHING HERE
 
-const navBarItems: string[] = [
+const navBarItems = [
   "PC Case",
   "Processor",
   "Motherboard",
@@ -19,7 +20,7 @@ function App() {
   return (
     <>
       <CustomerHeader></CustomerHeader>
-      <CustomerNavBar></CustomerNavBar>
+      <CustomerNavBar navBarItems={navBarItems}></CustomerNavBar>
       <Outlet></Outlet>
     </>
   );

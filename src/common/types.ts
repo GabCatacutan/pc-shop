@@ -8,3 +8,7 @@ export interface Product {
 export interface ProductListProps {
   products: Product[];
 }
+
+export interface NavBarProps{
+  navBarItems: string[];
+}

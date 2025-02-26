@@ -1,5 +1,26 @@
-function NavItemsDesktop() {
-  return <></>;
+import { Box, Button } from "@mui/material";
+import LoginComponent from "./LoginComponent";
+import { NavBarProps } from "../common/types";
+
+function NavItemsDesktop({
+  desktopNavBarItems,
+}: {
+  desktopNavBarItems: string[];
+}) {
+  return (
+    <>
+      <Box className="flex">
+        {desktopNavBarItems.map((item, index) => (
+          <Button variant="text" href={`/products?category=${encodeURIComponent(item)}`}>
+            {item}
+          </Button>
+        ))}
+        <div className="justify-end">
+          <LoginComponent />
+        </div>
+      </Box>
+    </>
+  );
 }
 
 export default NavItemsDesktop;

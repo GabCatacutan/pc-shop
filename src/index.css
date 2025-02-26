@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@theme {
+  --color-error: red;
+}
+
+@layer theme {
+  [data-theme="dark"] {
+    --color-primary: green;
+  }
+}

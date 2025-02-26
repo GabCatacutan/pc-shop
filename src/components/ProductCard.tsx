@@ -4,7 +4,7 @@ import { Product } from "../common/types";
 function ProductCard(product: Product) {
   return (
     <>
-      <div className="border object-center justify-items-center p-3">
+      <div className="border object-center justify-items-center p-3 bg-">
         <a href="/productpage">
           <img
             src={product.image}
@@ -16,7 +16,7 @@ function ProductCard(product: Product) {
         <p className="text-gray-600">${product.price}</p>
         <Button
           variant="contained"
-          className="mt-2 bg-blue-500 px-4 py-2 rounded"
+          className="mt-2 bg-background px-4 py-2 rounded"
         >
           Add to Cart
         </Button>
