@@ -18,7 +18,8 @@ function NavItemsMobile({
             {item}
           </Button>
         ))}
-        <div className="justify-end">
+        <hr></hr>
+        <div className="flex justify-center">
           <LoginComponent />
         </div>
       </Box>

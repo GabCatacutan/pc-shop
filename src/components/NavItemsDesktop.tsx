@@ -15,7 +15,7 @@ function NavItemsDesktop({
             {item}
           </Button>
         ))}
-        <div className="justify-end">
+        <div className="flex justify-end ml-auto">
           <LoginComponent />
         </div>
       </Box>

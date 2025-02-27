@@ -8,14 +8,14 @@ function LoginComponent() {
   if (!user) {
     return (
       <>
-        <Button variant="text" href="/login" className="float-right">
+        <Button variant="text" href="/login">
           <LoginIcon></LoginIcon>Login
         </Button>
       </>
     );
   } else {
     return (
-      <div className="float-right">
+      <div>
         <Button onClick={handleLogout}>
           Logout
         </Button>
