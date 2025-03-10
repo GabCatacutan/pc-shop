@@ -11,7 +11,10 @@ function NavItemsDesktop({
     <>
       <Box className="flex">
         {desktopNavBarItems.map((item, index) => (
-          <Button variant="text" href={`/products?category=${encodeURIComponent(item)}`}>
+          <Button
+            variant="text"
+            href={`/products?category=${encodeURIComponent(item)}`}
+          >
             {item}
           </Button>
         ))}

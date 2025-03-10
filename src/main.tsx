@@ -8,6 +8,9 @@ import LoginPage from "./pages/LoginPage.tsx";
 import "./index.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
+import Admin from "./pages/admin/Admin.tsx";
+import ProductManagement from "./pages/admin/ProductManagement.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +22,14 @@ const router = createBrowserRouter([
       { path: "/login", element: <LoginPage /> },
     ],
   },
+  {
+    path: "/admin",
+    element: <Admin />,
+    children: [
+      { path: "/admin", element: <AdminDashboard /> },
+      { path: "/admin/product-management", element: <ProductManagement />}
+    ]
+  }
 ]);
 
 createRoot(document.getElementById("root")!).render(
