@@ -12,7 +12,8 @@ import {
 const AdminCategories: React.FC = () => {
   return (
     <>
-    <Button variant="contained" className="mx-5 mb-2">Add Category</Button>
+    <h2>Categories</h2>
+    <Button variant="contained" className="">Add Category</Button>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

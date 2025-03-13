@@ -11,7 +11,6 @@ function Admin() {
       <div className="flex">
         <AdminNavBar />
         <div className="flex-grow-1">
-          <Toolbar></Toolbar>
           <Outlet></Outlet>
         </div>
       </div>
