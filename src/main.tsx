@@ -1,6 +1,6 @@
-import { StrictMode} from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import ProductListPage from "./pages/ProductListPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
@@ -10,7 +10,7 @@ import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import Admin from "./pages/admin/Admin.tsx";
-import ProductManagement from "./pages/admin/ProductManagement.tsx";
+import AdminCategories from "./pages/admin/AdminCategories.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,9 +27,9 @@ const router = createBrowserRouter([
     element: <Admin />,
     children: [
       { path: "/admin", element: <AdminDashboard /> },
-      { path: "/admin/product-management", element: <ProductManagement />}
-    ]
-  }
+      { path: "/admin/categories", element: <AdminCategories /> },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(

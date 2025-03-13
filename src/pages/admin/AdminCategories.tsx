@@ -9,7 +9,7 @@ import {
   Button
 } from "@mui/material";
 
-const ProductManagement: React.FC = () => {
+const AdminCategories: React.FC = () => {
   return (
     <>
     <Button variant="contained" className="mx-5 mb-2">Add Category</Button>
@@ -29,4 +29,4 @@ const ProductManagement: React.FC = () => {
   );
 };
 
-export default ProductManagement;
+export default AdminCategories;

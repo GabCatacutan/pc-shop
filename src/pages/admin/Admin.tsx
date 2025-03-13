@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import AdminNavBar from "../../components/AdminComponents/AdminNavBar";
-import { Box } from "@mui/material";
+import { Box, Toolbar } from "@mui/material";
 
 function Admin() {
 
@@ -10,7 +10,8 @@ function Admin() {
     <>
       <div className="flex">
         <AdminNavBar />
-        <div className="flex-grow-1 ml-[240px]">
+        <div className="flex-grow-1">
+          <Toolbar></Toolbar>
           <Outlet></Outlet>
         </div>
       </div>
