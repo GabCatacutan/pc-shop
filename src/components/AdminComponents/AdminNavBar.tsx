@@ -18,9 +18,10 @@ import { useState } from "react";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import PeopleIcon from '@mui/icons-material/People';
-import BorderAllIcon from '@mui/icons-material/BorderAll';
-import BorderClearIcon from '@mui/icons-material/BorderClear';
+import PeopleIcon from "@mui/icons-material/People";
+import BorderAllIcon from "@mui/icons-material/BorderAll";
+import BorderClearIcon from "@mui/icons-material/BorderClear";
+import InventoryIcon from "@mui/icons-material/Inventory";
 
 function AdminNavBar() {
   const theme = useTheme();
@@ -49,6 +50,7 @@ function AdminNavBar() {
       icon: <DashboardIcon />,
       link: "/admin/dashboard",
     },
+
     {
       name: "Categories",
       icon: <BorderAllIcon></BorderAllIcon>,
@@ -58,6 +60,11 @@ function AdminNavBar() {
       name: "Subcategories",
       icon: <BorderClearIcon></BorderClearIcon>,
       link: "/admin/subcategories",
+    },
+    {
+      name: "Products",
+      icon: <InventoryIcon />,
+      link: "/admin/products",
     },
     {
       name: "Orders",

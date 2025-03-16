@@ -24,3 +24,17 @@ export interface Category {
   category_name: string,
   created_at: string | Date
 }
+
+export interface ProductModalProps {
+  open: boolean;
+  handleClose: () => void;
+  onCreateProduct: (product: Product) => void;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  category_id: number;
+  price: number;
+  description: string;
+}
