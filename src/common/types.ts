@@ -12,3 +12,15 @@ export interface ProductListProps {
 export interface NavBarProps{
   navBarItems: string[];
 }
+
+export interface CategoryModalProps {
+  open: boolean;
+  handleClose: () => void;
+  onCreateCategory: (value: string) => void;
+}
+
+export interface Category {
+  id: number,
+  category_name: string,
+  created_at: string | Date
+}

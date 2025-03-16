@@ -11,6 +11,9 @@ import { AuthProvider } from "./context/AuthContext.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import Admin from "./pages/admin/Admin.tsx";
 import AdminCategories from "./pages/admin/AdminCategories.tsx";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -34,8 +37,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <RouterProvider router={router}></RouterProvider>
     </AuthProvider>
+    </QueryClientProvider>
   </StrictMode>
 );
