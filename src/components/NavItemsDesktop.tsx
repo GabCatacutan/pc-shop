@@ -9,15 +9,17 @@ function NavItemsDesktop({
 }) {
   return (
     <>
-      <Box className="flex">
+      <Box className="flex ">
+      <div className="flex flex-1 justify-center space-x-4">
         {desktopNavBarItems.map((item, index) => (
           <Button
             variant="text"
-            href={`/products?category=${encodeURIComponent(item.category_id)}`}
+            href={`/products?category=${encodeURIComponent(item.id)}`}
           >
             {item.category_name}
           </Button>
         ))}
+        </div>
         <div className="flex justify-end ml-auto">
           <LoginComponent />
         </div>

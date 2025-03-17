@@ -8,10 +8,13 @@ import supabase from "../config/supabase";
 import { Product } from "../common/types";
 
 // Fetch products with category names
-const fetchProducts = async (): Promise<Product[]> => {
+const fetchProducts = async (category_id: string | null): Promise<Product[]> => {
   const { data, error } = await supabase
     .from("products")
-    .select("*, categories(category_name)");
+    .select("*, categories(category_name)")
+    .eq("category_id", category_id);
+
+    
 
   if (error) throw error;
 
@@ -23,10 +26,11 @@ const fetchProducts = async (): Promise<Product[]> => {
 
 function ProductListing() {
   const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get("category");
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
-    queryFn: fetchProducts,
+    queryFn: () => fetchProducts(categoryId),
   });
 
   // Ensure data is mapped correctly
