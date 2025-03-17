@@ -9,23 +9,15 @@ import {
   CircularProgress,
   Button,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "../../config/supabase";
 import CreateProductModal from "../../components/AdminComponents/CreateProductModal";
 import { useState } from "react";
-
-interface Product {
-  id: number;
-  name: string;
-  category_id: number;
-  category_name?: string; // Fetched via JOIN
-}
+import { NewProduct, Product } from "../../common/types";
 
 // Fetch products with category names
 const fetchProducts = async (): Promise<Product[]> => {
   const { data, error } = await supabase.from("products").select("*, categories(category_name)");
-
-  console.log(data)
 
   if (error) throw error;
 
@@ -37,6 +29,7 @@ const fetchProducts = async (): Promise<Product[]> => {
 
 function AdminProductPage() {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["products"],
@@ -44,10 +37,15 @@ function AdminProductPage() {
   });
 
   // Create product
-  const handleCreateProduct = async (newProduct: Product) => {
+  const handleCreateProduct = async (newProduct: NewProduct) => {
     console.log("Product submitted", newProduct);
+
+    const { error } = await supabase.from("products").insert(newProduct
+    );
+    if (error) throw error;
+
     try {
-      queryClient.invalidateQueries(["products"]); // Refresh products
+      queryClient.invalidateQueries({queryKey: ["products"]}); // Refresh products
     } catch (error) {
       console.log(error);
     }
@@ -69,8 +67,10 @@ function AdminProductPage() {
           <TableHead>
             <TableRow>
               <TableCell>Product ID</TableCell>
-              <TableCell>Product Name</TableCell>
               <TableCell>Category</TableCell>
+              <TableCell>Product Name</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Description</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -90,8 +90,10 @@ function AdminProductPage() {
               data?.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell>{product.id}</TableCell>
-                  <TableCell>{product.name}</TableCell>
                   <TableCell>{product.category_name}</TableCell>
+                  <TableCell>{product.product_name}</TableCell>
+                  <TableCell>{product.price}</TableCell>
+                  <TableCell>{product.description}</TableCell>
                 </TableRow>
               ))
             )}

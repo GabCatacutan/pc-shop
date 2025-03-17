@@ -1,6 +1,8 @@
-import { Button, Modal, Box, Typography, TextField } from "@mui/material";
-import { ProductModalProps } from "../../common/types";
+import { Button, Modal, Box, Typography, TextField, Select, MenuItem } from "@mui/material";
+import { Category, ProductModalProps } from "../../common/types";
 import { useState } from "react";
+import supabase from "../../config/supabase";
+import { useQuery } from "@tanstack/react-query";
 
 const style = {
   position: "absolute",
@@ -14,18 +16,30 @@ const style = {
   p: 4,
 };
 
+// Fetch categories using React Query
+const fetchCategories = async (): Promise<Category[]> => {
+  const { data, error } = await supabase.from("categories").select();
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 function CreateProductModal({ open, handleClose, onCreateProduct }: ProductModalProps) {
-  const [productName, setCategoryName] = useState("");
-  const [categoryId, setCategoryId] = useState(null);
-  const [price, setPrice] = useState(null)
+  const [productName, setProductName] = useState<string>("");
+  const [categoryId, setCategoryId] = useState<number>(0);
+  const [price, setPrice] = useState<number>(0)
   const [description, setDescription] = useState("")
+
+  const { data: categories, isLoading, isError } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    enabled: open, // Fetch only when modal is open
+  });
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log()
-    onCreateProduct({name:productName, category_id:categoryId, price:price, description:description})
-    setCategoryName("")
-    setCategoryId(null)
+    onCreateProduct({product_name:productName, category_id:categoryId, price:price, description:description})
+    setProductName("")
+    setCategoryId(0)
     handleClose();
   }
 
@@ -42,9 +56,30 @@ function CreateProductModal({ open, handleClose, onCreateProduct }: ProductModal
             Create Category
           </Typography>
           <form className="flex flex-col" onSubmit={handleSubmit}>
+
+          {/* Category Select Field */}
+          {isLoading ? (
+            <Typography>Loading categories...</Typography>
+          ) : isError ? (
+            <Typography color="error">Error loading categories</Typography>
+          ) : (
+            <Select
+              value={categoryId ?? ""}
+              onChange={(e) => setCategoryId(Number(e.target.value))}
+              displayEmpty
+              required
+            >
+              <MenuItem value="" disabled>Select a Category</MenuItem>
+              {categories?.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.category_name}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
             
-            <TextField label="Product Name" onChange={(e) => setCategoryName(e.target.value)} required/>
-            <TextField type="number" onChange={(e) => setCategoryName(e.target.value)} required />
+            <TextField label="Product Name" onChange={(e) => setProductName(e.target.value)} required/>
+            <TextField label="Price" type="number" onChange={(e) => setPrice(Number(e.target.value))} required />
             <TextField label="Description" onChange={(e) => setDescription(e.target.value)} required/>
             <Button variant="contained" color="primary" type="submit">
               Submit

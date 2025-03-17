@@ -27,7 +27,7 @@ const AdminCategories: React.FC = () => {
       });
       if (error) throw error;
 
-      queryClient.invalidateQueries(["categories"]); // Refresh categories
+      queryClient.invalidateQueries({queryKey: ["categories"]}); // Refresh categories
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +49,7 @@ const AdminCategories: React.FC = () => {
       const { error } = await supabase.from("categories").delete().eq("id", id);
       if (error) throw error;
 
-      queryClient.invalidateQueries(["categories"]); // Refresh after delete
+      queryClient.invalidateQueries({queryKey: ["categories"]}); // Refresh after delete
     } catch (error) {
       console.log(error);
     }

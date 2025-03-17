@@ -28,13 +28,22 @@ export interface Category {
 export interface ProductModalProps {
   open: boolean;
   handleClose: () => void;
-  onCreateProduct: (product: Product) => void;
+  onCreateProduct: (product: NewProduct) => void;
 }
 
-export interface Product {
-  id: number;
-  name: string;
+//For creating a new product
+export interface NewProduct {
+  product_name: string;
   category_id: number;
   price: number;
+  description: string;
+}
+
+//For fetching products
+export interface Product {
+  id: number;
+  product_name: string;
+  category_id: number;
+  category_name?: string; // Fetched via JOIN
   description: string;
 }
