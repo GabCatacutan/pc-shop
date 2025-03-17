@@ -2,122 +2,55 @@ import ProductFilters from "../components/ProductFilters";
 import ProductList from "../components/ProductList";
 import testImage from "../assets/product_icon.png";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import LoadingComponent from "../components/LoadingComponent";
+import { useQuery } from "@tanstack/react-query";
+import supabase from "../config/supabase";
+import { Product } from "../common/types";
 
-const testProducts = [
-  {
-    category: "case",
-    name: "Case1",
-    image: testImage,
-    price: 50,
-  },
-  {
-    category: "case",
-    name: "Case2",
-    image: testImage,
-    price: 55,
-  },
-  {
-    category: "processor",
-    name: "CPU 1",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "processor",
-    name: "CPU 2",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "motherboard",
-    name: "Mobo 1",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "motherboard",
-    name: "Mobo 2",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "graphics card",
-    name: "GPU 1",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "graphics card",
-    name: "GPU 2",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "memory",
-    name: "Memory 1",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "memory",
-    name: "Memory 2",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "storage",
-    name: "Storage 1",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "storage",
-    name: "Storage 2",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "power supply",
-    name: "PSU 1",
-    image: testImage,
-    price: 60,
-  },
-  {
-    category: "power supply",
-    name: "PSU 2",
-    image: testImage,
-    price: 60,
-  },
-];
+// Fetch products with category names
+const fetchProducts = async (): Promise<Product[]> => {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*, categories(category_name)");
 
+  if (error) throw error;
+
+  return (data ?? []).map((product) => ({
+    ...product,
+    category_name: product.categories?.category_name || "Unknown",
+  }));
+};
 
 function ProductListing() {
   const [searchParams] = useSearchParams();
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const categoryName = searchParams.get("category");
-    console.log("category", categoryName);
-    setLoading(false)
-  },[]);
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
 
-  
+  // Ensure data is mapped correctly
+  const productData = products?.map((product) => ({
+    ...product,
+    image: testImage,
+  })) ?? [];
+
+  console.log("Product data", productData);
 
   return (
     <>
-      <p>ProductListing </p>
+      <p>Product Listing</p>
       <div className="flex mx-35 mb-35 min-h-screen">
         <div className="w-1/5 border-black border">
-          <ProductFilters/>
+          <ProductFilters />
         </div>
         <div className="w-4/5 border-black border">
-        {loading ? <LoadingComponent/> : <ProductList products={testProducts}></ProductList> }
+          {isLoading ? <LoadingComponent /> : <ProductList products={productData} />}
         </div>
       </div>
     </>
   );
 }
+
 
 export default ProductListing;

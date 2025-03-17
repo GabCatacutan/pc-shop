@@ -12,7 +12,7 @@ function ProductCard(product: Product) {
             className="w-[108px] h-[108px]"
           />
         </a>
-        <h2>{product.name}</h2>
+        <h2>{product.product_name}</h2>
         <p className="text-gray-600">${product.price}</p>
         <Button
           variant="contained"
