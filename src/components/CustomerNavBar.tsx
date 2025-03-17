@@ -16,7 +16,7 @@ function CustomerNavBar({navBarItems}: NavBarProps) {
     setOpen(newOpen);
   };
 
-  console.log(navBarItems)
+  console.log("Nav bar rendered")
 
   return (
     <nav className="px-3 border-b">

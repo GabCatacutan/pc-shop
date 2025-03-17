@@ -9,8 +9,13 @@ export interface ProductListProps {
   products: Product[];
 }
 
+export interface NavBarItem{
+  category_id:number,
+  category_name:string
+}
+
 export interface NavBarProps{
-  navBarItems: string[];
+  navBarItems: NavBarItem[];
 }
 
 export interface CategoryModalProps {

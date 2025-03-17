@@ -1,11 +1,11 @@
 import { Box, Button } from "@mui/material";
 import LoginComponent from "./LoginComponent";
-import { NavBarProps } from "../common/types";
+import { NavBarItem, NavBarProps } from "../common/types";
 
 function NavItemsMobile({
   mobileNavBarItems,
 }: {
-  mobileNavBarItems: string[];
+  mobileNavBarItems: NavBarItem[];
 }) {
   return (
     <>
@@ -13,9 +13,9 @@ function NavItemsMobile({
         {mobileNavBarItems.map((item, index) => (
           <Button
             variant="text"
-            href={`/products?category=${encodeURIComponent(item)}`}
+            href={`/products?category=${encodeURIComponent(item.category_id)}`}
           >
-            {item}
+            {item.category_name}
           </Button>
         ))}
         <hr></hr>
