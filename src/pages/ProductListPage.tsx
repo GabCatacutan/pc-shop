@@ -39,8 +39,6 @@ function ProductListing() {
     image: testImage,
   })) ?? [];
 
-  console.log("Product data", productData);
-
   return (
     <>
       <p>Product Listing</p>

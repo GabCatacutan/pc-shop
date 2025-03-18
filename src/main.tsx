@@ -13,6 +13,7 @@ import Admin from "./pages/admin/Admin.tsx";
 import AdminCategories from "./pages/admin/AdminCategories.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
 import AdminProductPage from "./pages/admin/AdminProductPage.tsx";
+import CartPage from "./pages/CartPage.tsx";
 
 const queryClient = new QueryClient()
 
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       { path: "/", element: <HomePage /> },
       { path: "/products", element: <ProductListPage /> },
       { path: "/login", element: <LoginPage /> },
+      {path: "/cart", element: <CartPage />}
     ],
   },
   {

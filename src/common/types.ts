@@ -52,3 +52,10 @@ export interface Product {
   category_name?: string; // Fetched via JOIN
   description: string;
 }
+
+export interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+};

@@ -1,12 +1,14 @@
 import { Box, Button } from "@mui/material";
 import LoginComponent from "./LoginComponent";
 import { NavBarItem, NavBarProps } from "../common/types";
+import CartButton from "./CartComponent";
 
 function NavItemsDesktop({
   desktopNavBarItems,
 }: {
   desktopNavBarItems: NavBarItem[];
 }) {
+  
   return (
     <>
       <Box className="flex ">
@@ -21,6 +23,7 @@ function NavItemsDesktop({
         ))}
         </div>
         <div className="flex justify-end ml-auto">
+          <CartButton></CartButton>
           <LoginComponent />
         </div>
       </Box>
