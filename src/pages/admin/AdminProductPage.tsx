@@ -51,6 +51,17 @@ function AdminProductPage() {
     }
   };
 
+  const handleDeleteProduct = async (id: number) => {
+    try {
+      const { error } = await supabase.from("products").delete().eq("id", id);
+      if (error) throw error;
+
+      queryClient.invalidateQueries({queryKey: ["products"]}); // Refresh after delete
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <h2>Products</h2>
@@ -71,6 +82,7 @@ function AdminProductPage() {
               <TableCell>Product Name</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -94,6 +106,11 @@ function AdminProductPage() {
                   <TableCell>{product.product_name}</TableCell>
                   <TableCell>{product.price}</TableCell>
                   <TableCell>{product.description}</TableCell>
+                  <TableCell align="right">
+                  <Button variant="contained" color="secondary" onClick={() => handleDeleteProduct(product.id)}>
+                    Delete
+                  </Button>
+                  </TableCell>
                 </TableRow>
               ))
             )}

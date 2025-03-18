@@ -36,6 +36,7 @@ export default function CartPage() {
           Clear Cart
         </Button>
       )}
+      {cart? <Button href="/checkout">Proceed To Checkout</Button> : <></>}
     </div>
   );
 }
