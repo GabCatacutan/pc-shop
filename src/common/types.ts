@@ -59,3 +59,12 @@ export interface CartItem {
   price: number;
   quantity: number;
 };
+
+export interface CheckoutFormData {
+  email: string;
+  first_name: string;
+  last_name: string;
+  address: string;
+  city: string;
+  zip: string;
+}
