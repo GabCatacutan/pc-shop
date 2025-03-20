@@ -13,6 +13,7 @@ import { User } from "@supabase/supabase-js"; // Import User type from Supabase
 interface AuthContextType {
   user: User | null;
   userDetails: Object | null;
+  role: string | null;
   handleLogin: (email: string, password: string) => Promise<void>;
   handleLogout: () => Promise<void>;
   handleSignUp: (
@@ -35,8 +36,29 @@ interface AuthProviderProps {
 // Create provider component
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [userDetails, setUserDetails] = useState<Object | null>(null);
+
+  const fetchUserDetails = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .select("full_name, phone_number, role")
+        .eq("id", userId)
+        .single();
+
+      if (error) {
+        console.error("Error fetching user details:", error.message);
+        return;
+      }
+
+      setUserDetails(data);
+      setRole(data.role || "customer"); // Default role is 'customer'
+    } catch (error) {
+      console.error("Unexpected error fetching user details:", error);
+    }
+  };
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -45,6 +67,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
         if (session?.user) {
           setUser(session.user);
+          fetchUserDetails(session.user.id)
         } else {
           setUser(null);
         }
@@ -71,6 +94,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       if (data?.user) {
         setUser(data.user);
+        fetchUserDetails(data.user.id)
       }
 
       alert("Login successful");
@@ -128,6 +152,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       value={{
         user,
         userDetails,
+        role,
         handleLogin,
         handleSignUp,
         handleLogout,

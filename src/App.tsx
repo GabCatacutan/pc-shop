@@ -4,9 +4,12 @@ import CustomerNavBar from "./components/CustomerNavBar";
 import { useQuery } from "@tanstack/react-query";
 import supabase from "./config/supabase";
 import { CartProvider } from "./context/CartContext";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
   // Fetch categories
+  const {role} = useAuth()
+  console.log(role)
   const { data, isLoading, isError } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {

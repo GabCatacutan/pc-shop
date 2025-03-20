@@ -16,9 +16,7 @@ function LoginComponent() {
   } else {
     return (
       <div>
-        <Button onClick={handleLogout}>
-          Logout
-        </Button>
+        <Button onClick={handleLogout}>Logout</Button>
       </div>
     );
   }

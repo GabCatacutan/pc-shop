@@ -1,12 +1,16 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import AdminNavBar from "../../components/AdminComponents/AdminNavBar";
 import { Box, Toolbar } from "@mui/material";
+import { useAuth } from "../../context/AuthContext";
 
-function Admin() {
+function Admin({ allowedRoles }: { allowedRoles: string[] }) {
+  const { role, loading } = useAuth();
 
-  const navWidth = 240
+  if (loading || role == null) {
+    return <div>Loading ... </div>;
+  }
 
-  return (
+  return allowedRoles.includes(role!) ? (
     <>
       <div className="flex">
         <AdminNavBar />
@@ -15,6 +19,8 @@ function Admin() {
         </div>
       </div>
     </>
+  ) : (
+    <Navigate to="/" />
   );
 }
 

@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Admin />,
+    element: <Admin allowedRoles={['admin']} />,
     children: [
       { path: "/admin", element: <AdminDashboard /> },
       { path: "/admin/categories", element: <AdminCategories /> },
