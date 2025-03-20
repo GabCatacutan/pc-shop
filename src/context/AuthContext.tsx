@@ -90,8 +90,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleSignUp = async (
     email: string,
     password: string,
-    phonenumber: string,
-    fullname: string
+    phone_number: string,
+    full_name: string
   ): Promise<void> => {
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -105,17 +105,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUser(data.user); // Update user state immediately
 
         // Insert additional user data into DB
-        // const { error: insertError } = await supabase.from("users").insert([
-        //   {
-        //     id: data.user.id,
-        //     email,
-        //     fullname,
-        //     phonenumber,
-        //   },
-        // ]);
-        // if(insertError){
-        //   throw insertError
-        // }
+        const { error: insertUserError } = await supabase.from("users").insert([
+          {
+            id: data.user.id,
+            email,
+            full_name,
+            phone_number,
+          },
+        ]);
+        if(insertUserError){
+          throw insertUserError
+        }
       }
     } catch (e: unknown) {
       const error = e as Error;
