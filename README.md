@@ -1,6 +1,7 @@
 # 🛒 E-Commerce App (React + Supabase)
 
 A semi-functional e-commerce application built with **React** (frontend) and **Supabase** (backend) for authentication and the database.
+This is a **personal project** created for learning full stack development.
 
 ## 🧑 Customer Features
 - 🔐 User authentication (login/signup via Supabase)
