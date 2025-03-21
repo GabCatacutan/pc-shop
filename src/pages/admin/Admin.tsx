@@ -1,13 +1,22 @@
 import { Navigate, Outlet } from "react-router-dom";
 import AdminNavBar from "../../components/AdminComponents/AdminNavBar";
-import { Box, Toolbar } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 
 function Admin({ allowedRoles }: { allowedRoles: string[] }) {
   const { role, loading } = useAuth();
 
   if (loading || role == null) {
-    return <div>Loading ... </div>;
+    return (
+      <>
+        <div className="flex">
+          <AdminNavBar />
+          <div className="flex-grow-1">
+            <CircularProgress />
+          </div>
+        </div>
+      </>
+    );
   }
 
   return allowedRoles.includes(role!) ? (

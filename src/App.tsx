@@ -1,30 +1,19 @@
 import { Outlet } from "react-router-dom";
 import CustomerHeader from "./components/CustomerHeader";
 import CustomerNavBar from "./components/CustomerNavBar";
-import { useQuery } from "@tanstack/react-query";
-import supabase from "./config/supabase";
 import { CartProvider } from "./context/CartContext";
-import { useAuth } from "./context/AuthContext";
+import { CategoriesProvider } from "./context/NavBarCategoriesContext";
 
 function App() {
-  // Fetch categories
-  const {role} = useAuth()
-  console.log(role)
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("categories").select();
-      if (error) throw error;
-      return data || [];
-    },
-  });
-
   return (
     <>
       <CartProvider>
-        <CustomerHeader></CustomerHeader>
-        <CustomerNavBar navBarItems={data ?? []}></CustomerNavBar>
-        <Outlet></Outlet>
+        <CustomerHeader />
+        <CategoriesProvider>
+          <CustomerNavBar />
+        </CategoriesProvider>
+        {/* ✅ Prevents unnecessary re-renders */}
+        <Outlet />
       </CartProvider>
     </>
   );
