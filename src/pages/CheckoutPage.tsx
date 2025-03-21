@@ -1,8 +1,11 @@
-import { Button, Divider, TextField, Typography } from "@mui/material";
+import { Button, Divider, TextField, Typography, Box } from "@mui/material";
 import { useState } from "react";
-import { CheckoutFormData } from "../common/types";
+import { CheckoutFormData, CartItem } from "../common/types";
+import { useCart } from "../context/CartContext"; // Assuming you have a CartContext
 
 export default function CheckoutPage() {
+  const { cart } = useCart(); // Get cart items from context
+
   const [formData, setFormData] = useState<CheckoutFormData>({
     email: "",
     first_name: "",
@@ -13,7 +16,9 @@ export default function CheckoutPage() {
   });
 
   function handleOrderSubmit() {
-    console.log(formData);
+    console.log("Order Details:", formData);
+    console.log("Cart Details:", cart);
+    // TODO: Add API call to process the order
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,64 +26,133 @@ export default function CheckoutPage() {
   };
 
   return (
-    <>
-      <div className="text-center m-10">
-        <h2>Checkout</h2>
-      </div>
-      <div className="flex w-1/2 mx-auto space-x-10">
-        <form className="flex flex-col flex-grow-2 px-20 border border-black shadow space-y-3 p-10">
-          <h3>Email</h3>
-          <TextField label="Email" variant="standard" required></TextField>
-          <Divider sx={{ my: 2 }} />
-          <h3> Shipping Details </h3>
+    <Box sx={{ maxWidth: "900px", mx: "auto", p: 3 }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        Checkout
+      </Typography>
+
+      <Box
+        component="form"
+        sx={{
+          display: "flex",
+          gap: 4,
+          justifyContent: "space-between",
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
+        {/* Left: Checkout Form */}
+        <Box
+          sx={{
+            flex: 2,
+            p: 3,
+            border: "1px solid #ddd",
+            borderRadius: 2,
+            boxShadow: 2,
+          }}
+        >
+          <Typography variant="h6">Email</Typography>
           <TextField
-            label="First name"
+            fullWidth
+            label="Email"
+            variant="standard"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <Divider sx={{ my: 2 }} />
+
+          <Typography variant="h6">Shipping Details</Typography>
+          <TextField
+            fullWidth
+            label="First Name"
             variant="standard"
             name="first_name"
             value={formData.first_name}
             onChange={handleChange}
             required
-          ></TextField>
+          />
           <TextField
-            label="Last name"
+            fullWidth
+            label="Last Name"
             variant="standard"
             name="last_name"
             value={formData.last_name}
             onChange={handleChange}
             required
-          ></TextField>
+          />
           <TextField
+            fullWidth
             label="Address"
-            name="address"
             variant="standard"
+            name="address"
             value={formData.address}
             onChange={handleChange}
             required
-          ></TextField>
+          />
           <TextField
+            fullWidth
             label="City"
             variant="standard"
             name="city"
             value={formData.city}
             onChange={handleChange}
             required
-          ></TextField>
+          />
           <TextField
+            fullWidth
             label="Zip / Postal Code"
             variant="standard"
             name="zip"
             value={formData.zip}
             onChange={handleChange}
             required
-          ></TextField>
-        </form>
-        <div className="flex flex-col flex-grow-1 border border-black shadow">
-          <p>Products</p>
-          <p>Total Price: </p>
-          <p>Mode of Payment: Cash on Deli</p>
-          <Button onClick={handleOrderSubmit}>Place Order</Button>
-        </div>
-      </div>
-    </>
+          />
+        </Box>
+
+        {/* Right: Order Summary */}
+        <Box
+          sx={{
+            flex: 1,
+            p: 3,
+            border: "1px solid #ddd",
+            borderRadius: 2,
+            boxShadow: 2,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <Typography variant="h6">Order Summary</Typography>
+          <Divider />
+
+          {/* Display Cart Items */}
+          {cart.length > 0 ? (
+            cart.map((item: CartItem) => (
+              <Box key={item.id} sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+                <Typography>{item.name} (x{item.quantity})</Typography>
+                <Typography>${(item.price * item.quantity).toFixed(2)}</Typography>
+              </Box>
+            ))
+          ) : (
+            <Typography color="text.secondary">Your cart is empty.</Typography>
+          )}
+
+          <Divider />
+          <Typography variant="h6">
+            Total: $
+            {cart
+              .reduce((acc, item) => acc + item.price * item.quantity, 0)
+              .toFixed(2)}
+          </Typography>
+
+          <Typography color="text.secondary">Mode of Payment: Cash on Delivery</Typography>
+
+          <Button variant="contained" color="primary" onClick={handleOrderSubmit}>
+            Place Order
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 }

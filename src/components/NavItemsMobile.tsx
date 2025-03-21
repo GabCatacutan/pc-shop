@@ -9,7 +9,7 @@ function NavItemsMobile({
 }) {
   return (
     <>
-      <Box className="flex flex-col gap-4">
+      <Box className="flex flex-col gap-4 p-2">
         {mobileNavBarItems.map((item, index) => (
           <Button
             variant="text"
