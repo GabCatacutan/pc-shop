@@ -11,12 +11,13 @@ import { AuthProvider } from "./context/AuthContext.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import Admin from "./pages/admin/Admin.tsx";
 import AdminCategories from "./pages/admin/AdminCategories.tsx";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AdminProductPage from "./pages/admin/AdminProductPage.tsx";
 import CartPage from "./pages/CartPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
+import AdminOrdersPage from "./pages/admin/AdminOrdersPage.tsx";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -26,17 +27,18 @@ const router = createBrowserRouter([
       { path: "/", element: <HomePage /> },
       { path: "/products", element: <ProductListPage /> },
       { path: "/login", element: <LoginPage /> },
-      {path: "/cart", element: <CartPage />},
-      {path: "/checkout", element: <CheckoutPage/ >}
+      { path: "/cart", element: <CartPage /> },
+      { path: "/checkout", element: <CheckoutPage /> },
     ],
   },
   {
     path: "/admin",
-    element: <Admin allowedRoles={['admin']} />,
+    element: <Admin allowedRoles={["admin"]} />,
     children: [
       { path: "/admin", element: <AdminDashboard /> },
       { path: "/admin/categories", element: <AdminCategories /> },
-      { path: "/admin/products", element: <AdminProductPage/ >}
+      { path: "/admin/products", element: <AdminProductPage /> },
+      { path: "/admin/orders", element: <AdminOrdersPage /> },
     ],
   },
 ]);
@@ -44,9 +46,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <RouterProvider router={router}></RouterProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </StrictMode>
 );

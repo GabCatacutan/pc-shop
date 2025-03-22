@@ -42,8 +42,7 @@ function ProductListing() {
 
   return (
     <>
-      <p>Product Listing</p>
-      <div className="flex mx-35 mb-35 min-h-screen">
+      <div className="flex mx-35 my-10 min-h-screen">
         <div className="w-1/5 border-black border">
           <ProductFilters />
         </div>

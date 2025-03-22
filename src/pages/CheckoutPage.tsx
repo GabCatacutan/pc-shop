@@ -7,7 +7,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import { CheckoutFormData, CartItem } from "../common/types";
+import { Order, CartItem } from "../common/types";
 import { useCart } from "../context/CartContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import supabase from "../config/supabase";
@@ -18,7 +18,7 @@ export default function CheckoutPage() {
   const { user } = useAuth();
   const { cart, clearCart } = useCart();
 
-  const [formData, setFormData] = useState<CheckoutFormData>({
+  const [formData, setFormData] = useState<Order>({
     user_id: user.id,
     email: "",
     first_name: "",

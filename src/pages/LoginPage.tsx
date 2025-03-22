@@ -91,18 +91,18 @@ const LoginPage: React.FC = () => {
             />
             <TextField
               fullWidth
-              label="Phone Number"
-              variant="outlined"
-              value={phonenumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
-            />
-            <TextField
-              fullWidth
               label="Full Name"
               variant="outlined"
               value={fullname}
               onChange={(e) => setFullName(e.target.value)}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              variant="outlined"
+              value={phonenumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
             <Button fullWidth variant="contained" color="primary" type="submit">
