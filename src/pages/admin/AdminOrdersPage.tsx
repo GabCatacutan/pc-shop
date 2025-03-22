@@ -12,13 +12,12 @@ import {
 import { Order } from "../../common/types";
 import supabase from "../../config/supabase";
 import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs"
 
 const fetchOrders = async (): Promise<Order[]> => {
-  const { data, error } = await supabase
-    .from("orders")
-    .select("*");
+  const { data, error } = await supabase.from("orders").select();
 
-    console.log("Order Data", data)
+  console.log("Order Data", data);
 
   if (error) throw error;
 
@@ -27,11 +26,10 @@ const fetchOrders = async (): Promise<Order[]> => {
   //   category_name: product.categories?.category_name || "Unknown",
   // }));
 
-  return data
+  return data;
 };
 
 function AdminOrdersPage() {
-
   const { data, isLoading, isError } = useQuery({
     queryKey: ["orders"],
     queryFn: fetchOrders,
@@ -67,18 +65,11 @@ function AdminOrdersPage() {
               data?.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.user_id.first_name}</TableCell>
-                  <TableCell>{order.product_name}</TableCell>
-                  <TableCell>{order.price}</TableCell>
-                  <TableCell>{order.description}</TableCell>
+                  <TableCell>
+                    {order.first_name + " " + order.last_name}
+                  </TableCell>
+                  <TableCell>{dayjs(order.created_at).format("YYYY-MM-DD HH:mm:ss Z")}</TableCell>
                   <TableCell align="right">
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => handleDeleteProduct(product.id)}
-                    >
-                      Delete
-                    </Button>
                   </TableCell>
                 </TableRow>
               ))
