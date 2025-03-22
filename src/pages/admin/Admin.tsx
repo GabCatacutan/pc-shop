@@ -6,7 +6,9 @@ import { useAuth } from "../../context/AuthContext";
 function Admin({ allowedRoles }: { allowedRoles: string[] }) {
   const { role, loading } = useAuth();
 
-  if (loading || role == null) {
+  console.log("Loading" ,loading, "role", role)
+
+  if (loading && role == null) {
     return (
       <>
         <div className="flex">

@@ -60,7 +60,8 @@ export interface CartItem {
   quantity: number;
 };
 
-export interface CheckoutFormData {
+export interface Order {
+  id:number;
   user_id: string;
   email: string;
   first_name: string;

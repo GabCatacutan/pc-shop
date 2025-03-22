@@ -19,8 +19,8 @@ interface AuthContextType {
   handleSignUp: (
     email: string,
     password: string,
+    fullname: string,
     phonenumber: string,
-    fullname: string
   ) => Promise<void>;
   loading: boolean;
 }
@@ -52,9 +52,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         console.error("Error fetching user details:", error.message);
         return;
       }
-
+      
       setUserDetails(data);
       setRole(data.role || "customer"); // Default role is 'customer'
+      setLoading(false);
+
     } catch (error) {
       console.error("Unexpected error fetching user details:", error);
     }
@@ -70,9 +72,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           fetchUserDetails(session.user.id)
         } else {
           setUser(null);
+          setLoading(false);
         }
-
-        setLoading(false);
       }
     );
 
@@ -114,8 +115,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleSignUp = async (
     email: string,
     password: string,
-    phone_number: string,
-    full_name: string
+    full_name: string,
+    phone_number: string
   ): Promise<void> => {
     try {
       const { data, error } = await supabase.auth.signUp({
