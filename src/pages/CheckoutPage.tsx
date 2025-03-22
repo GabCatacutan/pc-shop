@@ -1,25 +1,73 @@
-import { Button, Divider, TextField, Typography, Box } from "@mui/material";
+import {
+  Button,
+  Divider,
+  TextField,
+  Typography,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import { useState } from "react";
 import { CheckoutFormData, CartItem } from "../common/types";
-import { useCart } from "../context/CartContext"; // Assuming you have a CartContext
+import { useCart } from "../context/CartContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import supabase from "../config/supabase";
+import { useAuth } from "../context/AuthContext";
 
 export default function CheckoutPage() {
-  const { cart } = useCart(); // Get cart items from context
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { cart, clearCart } = useCart();
 
   const [formData, setFormData] = useState<CheckoutFormData>({
+    user_id: user.id,
     email: "",
     first_name: "",
     last_name: "",
     address: "",
     city: "",
     zip: "",
+    total_price: 0,
   });
 
-  function handleOrderSubmit() {
-    console.log("Order Details:", formData);
-    console.log("Cart Details:", cart);
-    // TODO: Add API call to process the order
-  }
+  const { mutate, isLoading, error, isSuccess } = useMutation({
+    mutationFn: async () => {
+      if (cart.length === 0) throw new Error("Your cart is empty!");
+
+      const totalPrice = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+
+      // Step 1: Insert Order
+      const { data: order, error: orderError } = await supabase
+        .from("orders")
+        .insert([{ ...formData, total_price: totalPrice }])
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // Step 2: Insert Order Items
+      const { error: orderItemsError } = await supabase
+        .from("order_items")
+        .insert(
+          cart.map((item) => ({
+            order_id: order.id,
+            product_id: item.id,
+            quantity: item.quantity,
+            price: item.price,
+          }))
+        );
+
+      if (orderItemsError) throw orderItemsError;
+
+      return order;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["orders"]);
+      clearCart(); // Clear the cart after successful checkout
+    },
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,6 +75,37 @@ export default function CheckoutPage() {
 
   return (
     <Box sx={{ maxWidth: "900px", mx: "auto", p: 3 }}>
+      {isLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            bgcolor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 1,
+          }}
+        >
+          <CircularProgress color="inherit" />
+        </Box>
+      )}
+
+      {isSuccess && (
+        <Typography color="success.main" mt={1}>
+          Order placed successfully!
+        </Typography>
+      )}
+
+      {error && (
+        <Typography color="error.main" mt={1}>
+          Error: {error.message}
+        </Typography>
+      )}
+
       <Typography variant="h4" align="center" gutterBottom>
         Checkout
       </Typography>
@@ -129,9 +208,16 @@ export default function CheckoutPage() {
           {/* Display Cart Items */}
           {cart.length > 0 ? (
             cart.map((item: CartItem) => (
-              <Box key={item.id} sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-                <Typography>{item.name} (x{item.quantity})</Typography>
-                <Typography>${(item.price * item.quantity).toFixed(2)}</Typography>
+              <Box
+                key={item.id}
+                sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+              >
+                <Typography>
+                  {item.name} (x{item.quantity})
+                </Typography>
+                <Typography>
+                  ${(item.price * item.quantity).toFixed(2)}
+                </Typography>
               </Box>
             ))
           ) : (
@@ -146,10 +232,17 @@ export default function CheckoutPage() {
               .toFixed(2)}
           </Typography>
 
-          <Typography color="text.secondary">Mode of Payment: Cash on Delivery</Typography>
+          <Typography color="text.secondary">
+            Mode of Payment: Cash on Delivery
+          </Typography>
 
-          <Button variant="contained" color="primary" onClick={handleOrderSubmit}>
-            Place Order
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => mutate()}
+            disabled={isLoading || cart.length === 0}
+          >
+            {isLoading ? "Processing..." : "Place Order"}
           </Button>
         </Box>
       </Box>

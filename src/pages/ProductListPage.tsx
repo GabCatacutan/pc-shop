@@ -8,13 +8,13 @@ import supabase from "../config/supabase";
 import { Product } from "../common/types";
 
 // Fetch products with category names
-const fetchProducts = async (category_id: string | null): Promise<Product[]> => {
+const fetchProducts = async (
+  category_id: string | null
+): Promise<Product[]> => {
   const { data, error } = await supabase
     .from("products")
     .select("*, categories(category_name)")
     .eq("category_id", category_id);
-
-    
 
   if (error) throw error;
 
@@ -34,10 +34,11 @@ function ProductListing() {
   });
 
   // Ensure data is mapped correctly
-  const productData = products?.map((product) => ({
-    ...product,
-    image: testImage,
-  })) ?? [];
+  const productData =
+    products?.map((product) => ({
+      ...product,
+      image: testImage,
+    })) ?? [];
 
   return (
     <>
@@ -47,12 +48,15 @@ function ProductListing() {
           <ProductFilters />
         </div>
         <div className="w-4/5 border-black border">
-          {isLoading ? <LoadingComponent /> : <ProductList products={productData} />}
+          {isLoading ? (
+            <LoadingComponent />
+          ) : (
+            <ProductList products={productData} />
+          )}
         </div>
       </div>
     </>
   );
 }
-
 
 export default ProductListing;

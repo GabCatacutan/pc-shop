@@ -61,10 +61,12 @@ export interface CartItem {
 };
 
 export interface CheckoutFormData {
+  user_id: string;
   email: string;
   first_name: string;
   last_name: string;
   address: string;
   city: string;
   zip: string;
+  total_price: number;
 }
