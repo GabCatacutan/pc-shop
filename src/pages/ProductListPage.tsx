@@ -8,9 +8,7 @@ import supabase from "../config/supabase";
 import { Product } from "../common/types";
 
 // Fetch products with category names
-const fetchProducts = async (
-  category_id: string | null
-): Promise<Product[]> => {
+const fetchProducts = async (category_id: string | null): Promise<Product[]> => {
   const { data, error } = await supabase
     .from("products")
     .select("*, categories(category_name)")
@@ -33,7 +31,7 @@ function ProductListing() {
     queryFn: () => fetchProducts(categoryId),
   });
 
-  // Ensure data is mapped correctly
+  // Map product data
   const productData =
     products?.map((product) => ({
       ...product,
@@ -41,20 +39,16 @@ function ProductListing() {
     })) ?? [];
 
   return (
-    <>
-      <div className="flex mx-35 my-10 min-h-screen">
-        <div className="w-1/5 border-black border">
-          <ProductFilters />
-        </div>
-        <div className="w-4/5 border-black border">
-          {isLoading ? (
-            <LoadingComponent />
-          ) : (
-            <ProductList products={productData} />
-          )}
-        </div>
+    <div className="flex flex-col md:flex-row mx-4 md:mx-10 my-6 min-h-screen">
+      {/* Sidebar (Filters) */}
+      <div className="w-full md:w-1/4 border border-black p-4 mb-4 md:mb-0">
+        <ProductFilters />
       </div>
-    </>
+      {/* Product List */}
+      <div className="w-full md:w-3/4 border border-black p-4">
+        {isLoading ? <LoadingComponent /> : <ProductList products={productData} />}
+      </div>
+    </div>
   );
 }
 
