@@ -35,7 +35,7 @@ function ProductListing() {
   const productData =
     products?.map((product) => ({
       ...product,
-      image: testImage,
+      image: product.image_url,
     })) ?? [];
 
   return (
