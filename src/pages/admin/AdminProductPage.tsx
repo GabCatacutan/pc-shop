@@ -8,12 +8,16 @@ import {
   TableBody,
   CircularProgress,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "../../config/supabase";
 import CreateProductModal from "../../components/AdminComponents/CreateProductModal";
 import { useState } from "react";
 import { NewProduct, Product } from "../../common/types";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 // Fetch products with category names
 const fetchProducts = async (): Promise<Product[]> => {
@@ -31,6 +35,8 @@ const fetchProducts = async (): Promise<Product[]> => {
 
 function AdminProductPage() {
   const [open, setOpen] = useState(false);
+  const [imageOpen, setImageOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
@@ -54,17 +60,17 @@ function AdminProductPage() {
       console.error("Image upload error:", uploadError);
       return;
     }
-    console.log("Uploaded image", uploadData)
+    console.log("Uploaded image", uploadData);
 
-    const uploadedImgURL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${uploadData.path}`
+    const uploadedImgURL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${uploadData.fullPath}`;
 
-    newProduct.image_url = uploadedImgURL
+    newProduct.image_url = uploadedImgURL;
 
     const { error } = await supabase.from("products").insert(newProduct);
     if (error) throw error;
 
     try {
-      queryClient.invalidateQueries({ queryKey: ["products"] }); // Refresh products
+      queryClient.invalidateQueries({ queryKey: ["products"] }); // Refreshes product list
     } catch (error) {
       console.log("Error in creating product", error);
     }
@@ -79,6 +85,12 @@ function AdminProductPage() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleOpenImage = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setImageOpen(true);
+    console.log(imageUrl)
   };
 
   return (
@@ -128,6 +140,13 @@ function AdminProductPage() {
                   <TableCell align="right">
                     <Button
                       variant="contained"
+                      color="primary"
+                      onClick={() => handleOpenImage(product.image_url)}
+                    >
+                      <VisibilityIcon />
+                    </Button>
+                    <Button
+                      variant="contained"
                       color="secondary"
                       onClick={() => handleDeleteProduct(product.id)}
                     >
@@ -140,6 +159,14 @@ function AdminProductPage() {
           </TableBody>
         </Table>
       </TableContainer>
+      
+      {/* modal for viewing product image */}
+      <Dialog open={imageOpen} onClose={() => setImageOpen(false)}>
+        <DialogTitle>Product Image</DialogTitle>
+        <DialogContent>
+          <img src={selectedImage} alt="Product" style={{ width: "100%" }} />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

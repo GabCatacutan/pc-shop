@@ -33,7 +33,7 @@ export interface Category {
 export interface ProductModalProps {
   open: boolean;
   handleClose: () => void;
-  onCreateProduct: (product: NewProduct) => void;
+  onCreateProduct: (product: NewProduct, image: File) => void;
 }
 
 //For creating a new product
@@ -52,6 +52,7 @@ export interface Product {
   category_id: number;
   category_name?: string; // Fetched via JOIN
   description: string;
+  image_url: string;
 }
 
 export interface CartItem {
