@@ -17,7 +17,9 @@ import { NewProduct, Product } from "../../common/types";
 
 // Fetch products with category names
 const fetchProducts = async (): Promise<Product[]> => {
-  const { data, error } = await supabase.from("products").select("*, categories(category_name)");
+  const { data, error } = await supabase
+    .from("products")
+    .select("*, categories(category_name)");
 
   if (error) throw error;
 
@@ -37,17 +39,34 @@ function AdminProductPage() {
   });
 
   // Create product
-  const handleCreateProduct = async (newProduct: NewProduct) => {
-    console.log("Product submitted", newProduct);
+  const handleCreateProduct = async (
+    newProduct: NewProduct,
+    imageFile: File
+  ) => {
+    const fileName = `${Date.now()}-${imageFile.name}`;
 
-    const { error } = await supabase.from("products").insert(newProduct
-    );
+    //Upload image to storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("images")
+      .upload(`/product_images/${fileName}`, imageFile);
+
+    if (uploadError) {
+      console.error("Image upload error:", uploadError);
+      return;
+    }
+    console.log("Uploaded image", uploadData)
+
+    const uploadedImgURL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${uploadData.path}`
+
+    newProduct.image_url = uploadedImgURL
+
+    const { error } = await supabase.from("products").insert(newProduct);
     if (error) throw error;
 
     try {
-      queryClient.invalidateQueries({queryKey: ["products"]}); // Refresh products
+      queryClient.invalidateQueries({ queryKey: ["products"] }); // Refresh products
     } catch (error) {
-      console.log(error);
+      console.log("Error in creating product", error);
     }
   };
 
@@ -56,7 +75,7 @@ function AdminProductPage() {
       const { error } = await supabase.from("products").delete().eq("id", id);
       if (error) throw error;
 
-      queryClient.invalidateQueries({queryKey: ["products"]}); // Refresh after delete
+      queryClient.invalidateQueries({ queryKey: ["products"] }); // Refresh after delete
     } catch (error) {
       console.log(error);
     }
@@ -107,9 +126,13 @@ function AdminProductPage() {
                   <TableCell>{product.price}</TableCell>
                   <TableCell>{product.description}</TableCell>
                   <TableCell align="right">
-                  <Button variant="contained" color="secondary" onClick={() => handleDeleteProduct(product.id)}>
-                    Delete
-                  </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleDeleteProduct(product.id)}
+                    >
+                      Delete
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))

@@ -41,7 +41,7 @@ function ProductListing() {
   return (
     <div className="flex flex-col md:flex-row mx-4 md:mx-10 my-6 min-h-screen">
       {/* Sidebar (Filters) */}
-      <div className="w-full md:w-1/4 border border-black p-4 mb-4 md:mb-0">
+      <div className="w-full md:w-1/4 border border-black p-4 mb-6 md:mb-0">
         <ProductFilters />
       </div>
       {/* Product List */}

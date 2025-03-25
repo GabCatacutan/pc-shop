@@ -42,6 +42,7 @@ export interface NewProduct {
   category_id: number;
   price: number;
   description: string;
+  image_url: string;
 }
 
 //For fetching products
