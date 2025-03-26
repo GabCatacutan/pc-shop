@@ -1,5 +1,4 @@
 import {
-  Button,
   TableContainer,
   Paper,
   Table,
@@ -9,15 +8,13 @@ import {
   TableBody,
   CircularProgress,
 } from "@mui/material";
-import { Order } from "../../common/types";
+import { User } from "../../common/types";
 import supabase from "../../config/supabase";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs"
 
-const fetchOrders = async (): Promise<Order[]> => {
-  const { data, error } = await supabase.from("orders").select();
-
-  console.log("Order Data", data);
+const fetchUsers = async (): Promise<User[]> => {
+  const { data, error } = await supabase.from("users").select();
 
   if (error) throw error;
 
@@ -29,10 +26,10 @@ const fetchOrders = async (): Promise<Order[]> => {
   return data;
 };
 
-function AdminOrdersPage() {
+function AdminUsersPage() {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["orders"],
-    queryFn: fetchOrders,
+    queryKey: ["users"],
+    queryFn: fetchUsers,
   });
 
   return (
@@ -42,9 +39,10 @@ function AdminOrdersPage() {
         <Table>
           <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
             <TableRow>
-              <TableCell>Order ID/Order #</TableCell>
+              <TableCell>User_Id</TableCell>
               <TableCell>User Full Name</TableCell>
-              <TableCell>Date Ordered</TableCell>
+              <TableCell>Date Created</TableCell>
+              <TableCell>Role</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -62,13 +60,14 @@ function AdminOrdersPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              data?.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell>{order.id}</TableCell>
+              data?.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell>{user.id}</TableCell>
                   <TableCell>
-                    {order.first_name + " " + order.last_name}
+                    {user.full_name}
                   </TableCell>
-                  <TableCell>{dayjs(order.created_at).format("YYYY-MM-DD HH:mm:ss Z")}</TableCell>
+                  <TableCell>{dayjs(user.created_at).format("YYYY-MM-DD HH:mm:ss Z")}</TableCell>
+                  <TableCell>{user.role}</TableCell>
                   <TableCell align="right">
                   </TableCell>
                 </TableRow>
@@ -81,4 +80,4 @@ function AdminOrdersPage() {
   );
 }
 
-export default AdminOrdersPage;
+export default AdminUsersPage;

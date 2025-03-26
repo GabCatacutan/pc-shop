@@ -16,6 +16,7 @@ import AdminProductPage from "./pages/admin/AdminProductPage.tsx";
 import CartPage from "./pages/CartPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage.tsx";
+import AdminUsersPage from "./pages/admin/AdminUsersPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "/admin/categories", element: <AdminCategories /> },
       { path: "/admin/products", element: <AdminProductPage /> },
       { path: "/admin/orders", element: <AdminOrdersPage /> },
+      { path: "/admin/users", element: <AdminUsersPage /> },
     ],
   },
 ]);

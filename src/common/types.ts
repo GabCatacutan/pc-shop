@@ -73,3 +73,12 @@ export interface Order {
   zip: string;
   total_price: number;
 }
+
+export interface User{
+  id: string;
+  email: string;
+  full_name: string;
+  phone_number: string
+  role: string;
+  created_at: string | Date
+}

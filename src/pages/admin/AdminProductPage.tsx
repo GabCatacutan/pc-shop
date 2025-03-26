@@ -106,8 +106,8 @@ function AdminProductPage() {
       />
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
-            <TableRow>
+          <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+            <TableRow >
               <TableCell>Product ID</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Product Name</TableCell>

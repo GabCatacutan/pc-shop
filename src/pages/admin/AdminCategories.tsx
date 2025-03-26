@@ -69,7 +69,7 @@ const AdminCategories: React.FC = () => {
 
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
             <TableRow>
               <TableCell>Category ID</TableCell>
               <TableCell>Category Name</TableCell>
