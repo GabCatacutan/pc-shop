@@ -72,6 +72,7 @@ export interface Order {
   city: string;
   zip: string;
   total_price: number;
+  created_at: string | Date;
 }
 
 export interface User{

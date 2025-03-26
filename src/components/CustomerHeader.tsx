@@ -4,7 +4,7 @@ function CustomerHeader() {
   return (
     <>
       <div className="flex justify-center m-2">
-          <Link href="/"><h1>Insert Title/Logo Here</h1></Link>
+          <Link href="/"><h1>ByteMart</h1></Link>
           <form>
             <TextField label="Search" variant="standard"></TextField>
           </form>
