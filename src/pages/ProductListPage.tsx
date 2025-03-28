@@ -1,18 +1,24 @@
 import ProductFilters from "../components/ProductFilters";
 import ProductList from "../components/ProductList";
-import testImage from "../assets/product_icon.png";
-import { useSearchParams } from "react-router-dom";
 import LoadingComponent from "../components/LoadingComponent";
+import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../config/supabase";
 import { Product } from "../common/types";
+import { useEffect, useState } from "react";
 
-// Fetch products with category names
-const fetchProducts = async (category_id: string | null): Promise<Product[]> => {
+// Fetch products with price range filter
+const fetchProducts = async (
+  category_id: string | null,
+  minPrice: number,
+  maxPrice: number
+): Promise<Product[]> => {
   const { data, error } = await supabase
     .from("products")
     .select("*, categories(category_name)")
-    .eq("category_id", category_id);
+    .eq("category_id", category_id)
+    .gte("price", minPrice) // Minimum price filter
+    .lte("price", maxPrice); // Maximum price filter
 
   if (error) throw error;
 
@@ -26,12 +32,28 @@ function ProductListing() {
   const [searchParams] = useSearchParams();
   const categoryId = searchParams.get("category");
 
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    0, 400000000,
+  ]);
+  const [initialized, setInitialized] = useState(false); // Prevent overwriting user-selected price
+
   const { data: products, isLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => fetchProducts(categoryId),
+    queryKey: ["products", categoryId, priceRange],
+    queryFn: () => fetchProducts(categoryId, priceRange[0], priceRange[1]),
   });
 
-  // Map product data
+  useEffect(() => {
+    if (products && products.length > 0 && !initialized) {
+      const prices = products.map((p) => p.price);
+      const max = Math.max(...prices);
+
+      setMaxPrice(max);
+      setPriceRange([0, max]); // Initialize range
+      setInitialized(true); // Mark initialization of initial prices as true
+    }
+  }, [products, initialized]);
+
   const productData =
     products?.map((product) => ({
       ...product,
@@ -40,13 +62,19 @@ function ProductListing() {
 
   return (
     <div className="flex flex-col md:flex-row mx-4 md:mx-10 my-6 min-h-screen">
-      {/* Sidebar (Filters) */}
       <div className="w-full md:w-1/4 border border-black p-4 mb-6 md:mb-0">
-        <ProductFilters />
+        <ProductFilters
+          maxPrice={maxPrice}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+        />
       </div>
-      {/* Product List */}
       <div className="w-full md:w-3/4 border border-black p-4">
-        {isLoading ? <LoadingComponent /> : <ProductList products={productData} />}
+        {isLoading ? (
+          <LoadingComponent />
+        ) : (
+          <ProductList products={productData} />
+        )}
       </div>
     </div>
   );

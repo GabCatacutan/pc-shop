@@ -1,34 +1,29 @@
-import { Checkbox, FormControlLabel, Slider } from "@mui/material";
+import { Slider } from "@mui/material";
 import * as React from "react";
 
-function valuetext(value: number) {
-  return `${value}°C`;
-}
+function ProductFilters({ maxPrice, priceRange, setPriceRange }: { maxPrice: number, priceRange: [number, number], setPriceRange: (value: [number, number]) => void }) {
 
-function ProductFilters() {
-  const [value, setValue] = React.useState<number[]>([0, 100]);
-
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number[]);
+  // Update price range when slider changes
+  const handlePriceChange = (event: Event, newValue: number | number[]) => {
+    setPriceRange(newValue as [number, number]);
   };
 
   return (
     <div className="m-3">
       <h1>Filters:</h1>
-      <p>Brand</p>
+
+      {/* Price Range Filter */}
       <p>Price Range</p>
       <div className="w-3/4">
         <Slider
-          getAriaLabel={() => "Temperature range"}
-          value={value}
-          onChange={handleChange}
+          getAriaLabel={() => "Price range"}
+          value={priceRange}
+          onChange={handlePriceChange}
           valueLabelDisplay="auto"
-          getAriaValueText={valuetext}
+          min={0}
+          max={maxPrice || 100}
         />
       </div>
-      <p>Availability</p>
-      <FormControlLabel control={<Checkbox/>} label="In Stock" />
-      <FormControlLabel control={<Checkbox/>} label="Out of Stock" />
     </div>
   );
 }
