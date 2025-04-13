@@ -8,6 +8,7 @@ import {
 } from "react";
 import supabase from "../config/supabase.ts";
 import { User } from "@supabase/supabase-js"; // Import User type from Supabase
+import { useNavigate } from "react-router-dom";
 
 // Define context type
 interface AuthContextType {
@@ -109,6 +110,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleLogout = async (): Promise<void> => {
     await supabase.auth.signOut()
     await supabase.auth.refreshSession()
+    window.location.href = '/';
   };
 
   // Signup function
