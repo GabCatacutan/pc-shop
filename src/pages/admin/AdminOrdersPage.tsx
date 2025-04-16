@@ -8,11 +8,17 @@ import {
   TableCell,
   TableBody,
   CircularProgress,
+  Dialog,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { Order } from "../../common/types";
 import supabase from "../../config/supabase";
 import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs"
+import dayjs from "dayjs";
+import { useState } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import ViewOrderModal from "../../components/AdminComponents/ViewOrderModal";
 
 const fetchOrders = async (): Promise<Order[]> => {
   const { data, error } = await supabase.from("orders").select();
@@ -21,23 +27,38 @@ const fetchOrders = async (): Promise<Order[]> => {
 
   if (error) throw error;
 
-  // return data.map((product) => ({
-  //   ...product,
-  //   category_name: product.categories?.category_name || "Unknown",
-  // }));
-
   return data;
 };
 
 function AdminOrdersPage() {
+  const [orderModalOpen, setOrderModalOpen] = useState<boolean>(false);
+  const [orderId, setOrderId] = useState<number>();
+
+  //Fetch all orders to be displayed in table
   const { data, isLoading, isError } = useQuery({
     queryKey: ["orders"],
     queryFn: fetchOrders,
   });
 
+  function handleViewOrder(id: number): void {
+    setOrderId(id);
+    setOrderModalOpen(true);
+  }
+
+  //Fetch order to be displayed when viewing a single order
   return (
     <>
-      <h2>Products</h2>
+      <h2>Orders</h2>
+
+      {/**Render Order Modal only when it is open */}
+      {orderModalOpen && orderId !== undefined && (
+        <ViewOrderModal
+          open={orderModalOpen}
+          orderId={orderId}
+          handleClose={() => setOrderModalOpen(false)}
+        />
+      )}
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
@@ -68,8 +89,17 @@ function AdminOrdersPage() {
                   <TableCell>
                     {order.first_name + " " + order.last_name}
                   </TableCell>
-                  <TableCell>{dayjs(order.created_at).format("YYYY-MM-DD HH:mm:ss Z")}</TableCell>
+                  <TableCell>
+                    {dayjs(order.created_at).format("YYYY-MM-DD HH:mm:ss Z")}
+                  </TableCell>
                   <TableCell align="right">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleViewOrder(order.id)}
+                    >
+                      <VisibilityIcon />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
@@ -78,7 +108,7 @@ function AdminOrdersPage() {
         </Table>
       </TableContainer>
     </>
-  );
+  )
 }
 
 export default AdminOrdersPage;

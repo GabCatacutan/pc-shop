@@ -36,6 +36,12 @@ export interface ProductModalProps {
   onCreateProduct: (product: NewProduct, image: File) => void;
 }
 
+export interface ViewOrderModalProps {
+  open: boolean;
+  handleClose: () => void;
+  orderId: number
+}
+
 //For creating a new product
 export interface NewProduct {
   product_name: string;
