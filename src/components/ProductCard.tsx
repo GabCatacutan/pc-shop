@@ -5,10 +5,11 @@ import { useCart } from "../context/CartContext";
 function ProductCard(product: Product) {
 
   const {addToCart} = useCart();
+  console.log("Product details", product)
   return (
     <>
       <div className="border object-center justify-items-center p-3 bg-">
-        <a href="/productpage">
+      <a href={`/product/${product.id}`}>
           <img
             src={product.image}
             alt={product.product_name}

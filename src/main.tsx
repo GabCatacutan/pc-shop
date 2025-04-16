@@ -17,6 +17,7 @@ import CartPage from "./pages/CartPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage.tsx";
 import AdminUsersPage from "./pages/admin/AdminUsersPage.tsx";
+import ProductPage from "./pages/ProductPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/products", element: <ProductListPage /> },
+      { path: "/product/:productId", element: <ProductPage /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/cart", element: <CartPage /> },
       { path: "/checkout", element: <CheckoutPage /> },

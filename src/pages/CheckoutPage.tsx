@@ -18,16 +18,7 @@ export default function CheckoutPage() {
   const { user } = useAuth();
   const { cart, clearCart } = useCart();
 
-  const [formData, setFormData] = useState<Order>({
-    user_id: user.id,
-    email: "",
-    first_name: "",
-    last_name: "",
-    address: "",
-    city: "",
-    zip: "",
-    total_price: 0,
-  });
+  const [formData, setFormData] = useState<Order>();
 
   const { mutate, isLoading, error, isSuccess } = useMutation({
     mutationFn: async () => {
@@ -135,7 +126,7 @@ export default function CheckoutPage() {
             label="Email"
             variant="standard"
             name="email"
-            value={formData.email}
+            value={formData?.email}
             onChange={handleChange}
             required
           />
@@ -147,7 +138,7 @@ export default function CheckoutPage() {
             label="First Name"
             variant="standard"
             name="first_name"
-            value={formData.first_name}
+            value={formData?.first_name}
             onChange={handleChange}
             required
           />
@@ -156,7 +147,7 @@ export default function CheckoutPage() {
             label="Last Name"
             variant="standard"
             name="last_name"
-            value={formData.last_name}
+            value={formData?.last_name}
             onChange={handleChange}
             required
           />
@@ -165,7 +156,7 @@ export default function CheckoutPage() {
             label="Address"
             variant="standard"
             name="address"
-            value={formData.address}
+            value={formData?.address}
             onChange={handleChange}
             required
           />
@@ -174,7 +165,7 @@ export default function CheckoutPage() {
             label="City"
             variant="standard"
             name="city"
-            value={formData.city}
+            value={formData?.city}
             onChange={handleChange}
             required
           />
@@ -183,7 +174,7 @@ export default function CheckoutPage() {
             label="Zip / Postal Code"
             variant="standard"
             name="zip"
-            value={formData.zip}
+            value={formData?.zip}
             onChange={handleChange}
             required
           />
