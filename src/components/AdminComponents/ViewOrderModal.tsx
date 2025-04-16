@@ -102,7 +102,7 @@ function ViewOrderModal({ open, orderId, handleClose }: ViewOrderModalProps) {
       </Box>
       </Modal>
     </>
-  );
+  )
 }
 
 export default ViewOrderModal;
