@@ -1,6 +1,6 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import LoginComponent from "./LoginComponent";
-import { NavBarItem, NavBarProps } from "../common/types";
+import { NavBarItem } from "../common/types";
 
 function NavItemsMobile({
   mobileNavBarItems,
@@ -8,22 +8,35 @@ function NavItemsMobile({
   mobileNavBarItems: NavBarItem[];
 }) {
   return (
-    <>
-      <Box className="flex flex-col gap-4 p-2">
-        {mobileNavBarItems.map((item, index) => (
-          <Button
-            variant="text"
-            href={`/products?category=${encodeURIComponent(item.category_id)}`}
-          >
-            {item.category_name}
-          </Button>
-        ))}
-        <hr></hr>
-        <div className="flex justify-center">
-          <LoginComponent />
-        </div>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: 2, width: 250 }}>
+      {/* Category Links */}
+      {mobileNavBarItems.map((item) => (
+        <Button
+          key={item.category_id}
+          variant="text"
+          href={`/products?category=${encodeURIComponent(item.category_id)}`}
+          sx={{
+            justifyContent: "flex-start",
+            textTransform: "none",
+            fontSize: "1rem",
+            color: "text.primary",
+            "&:hover": {
+              color: "primary.main",
+              backgroundColor: "transparent",
+            },
+          }}
+        >
+          {item.category_name}
+        </Button>
+      ))}
+
+      <Divider sx={{ my: 1 }} />
+
+      {/* Login Section */}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <LoginComponent />
       </Box>
-    </>
+    </Box>
   );
 }
 
