@@ -5,15 +5,14 @@ import { useCart } from "../context/CartContext";
 function ProductCard(product: Product) {
 
   const {addToCart} = useCart();
-  console.log("Product details", product)
   return (
     <>
-      <div className="border object-center justify-items-center p-3 bg-">
+      <div className="border object-center justify-items-center p-3">
       <a href={`/product/${product.id}`}>
           <img
-            src={product.image}
+            src={product.image_url}
             alt={product.product_name}
-            className="w-[108px] h-[108px]"
+            className="w-[120px] h-[120px]"
           />
         </a>
         <h2>{product.product_name}</h2>

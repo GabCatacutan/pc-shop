@@ -1,7 +1,9 @@
+import RecentProducts from "../components/RecentProducts";
+
 function HomePage() {
   return (
     <div>
-        <p>Home</p>
+      <RecentProducts></RecentProducts>
     </div>
   );
 }
