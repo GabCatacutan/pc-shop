@@ -3,6 +3,7 @@ import CustomerHeader from "./components/CustomerHeader";
 import CustomerNavBar from "./components/CustomerNavBar";
 import { CartProvider } from "./context/CartContext";
 import { CategoriesProvider } from "./context/NavBarCategoriesContext";
+import Footer from "./components/FooterComponent";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         </CategoriesProvider>
         {/* ✅ Prevents unnecessary re-renders */}
         <Outlet />
+        <Footer></Footer>
       </CartProvider>
     </>
   );

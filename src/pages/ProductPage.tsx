@@ -9,10 +9,12 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import { useCart } from "../context/CartContext";
 
 function ProductPage() {
   const params = useParams();
   const productId = params.productId;
+  const { addToCart } = useCart();
 
   const fetchProduct = async (): Promise<Product> => {
     const { data, error } = await supabase
@@ -37,17 +39,17 @@ function ProductPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4 py-8">
-      <Card className="w-full max-w-5xl md:flex shadow-2xl rounded-2xl overflow-hidden">
+      <Card className="flex flex-col md:flex shadow-2xl rounded-2xl overflow-hidden">
         {/* Product Image */}
         <CardMedia
           component="img"
           image={data.image_url}
           alt={data.product_name}
-          className="w-full md:w-1/2 h-64 md:h-auto object-cover"
+          className="md:wh-1/2 max-w-64 max-h-64 md:h-auto object-cover"
         />
 
         {/* Product Info */}
-        <CardContent className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center">
+        <CardContent className="">
           <Typography variant="h4" component="h1" className="font-bold mb-4">
             {data.product_name}
           </Typography>
@@ -65,6 +67,16 @@ function ProductPage() {
             color="primary"
             size="large"
             className="w-full md:w-auto"
+            onClick={() => {
+              if (data) {
+                addToCart({
+                  id: data.id,
+                  name: data.product_name,
+                  price: data.price,
+                  quantity: 1,
+                });
+              }
+            }}
           >
             Add to Cart
           </Button>

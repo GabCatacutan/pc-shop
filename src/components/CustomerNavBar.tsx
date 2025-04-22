@@ -18,7 +18,7 @@ function CustomerNavBar() {
   const { categories } = useCategories();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
+ 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };

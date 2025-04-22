@@ -19,7 +19,6 @@ export function CategoriesProvider({ children }: { children: React.ReactNode }) 
     },
   });
 
-  // Memoize categories to prevent unnecessary re-renders
   const value = useMemo(() => ({ categories: data ?? [], isLoading }), [data, isLoading]);
 
   return <NavBarCategoriesContext.Provider value={value}>{children}</NavBarCategoriesContext.Provider>;
