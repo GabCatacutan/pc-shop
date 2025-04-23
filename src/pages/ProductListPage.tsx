@@ -11,14 +11,25 @@ import { useEffect, useState } from "react";
 const fetchProducts = async (
   category_id: string | null,
   minPrice: number,
-  maxPrice: number
+  maxPrice: number,
+  productName: string | null
 ): Promise<Product[]> => {
-  const { data, error } = await supabase
+  //Base query with no filters & search
+  let productQuery = supabase
     .from("products")
     .select("*, categories(category_name)")
-    .eq("category_id", category_id)
     .gte("price", minPrice) // Minimum price filter
     .lte("price", maxPrice); // Maximum price filter
+
+    if (productName) {
+      productQuery = productQuery.like("product_name", `%${productName}%`);
+    }
+
+    if(category_id){
+      productQuery=productQuery.eq("category_id", category_id)
+    }
+
+  const { data, error } = await productQuery
 
   if (error) throw error;
 
@@ -31,6 +42,7 @@ const fetchProducts = async (
 function ProductListing() {
   const [searchParams] = useSearchParams();
   const categoryId = searchParams.get("category");
+  const productName = searchParams.get("productName");
 
   const [maxPrice, setMaxPrice] = useState(0);
   const [priceRange, setPriceRange] = useState<[number, number]>([
@@ -40,7 +52,8 @@ function ProductListing() {
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["products", categoryId, priceRange],
-    queryFn: () => fetchProducts(categoryId, priceRange[0], priceRange[1]),
+    queryFn: () =>
+      fetchProducts(categoryId, priceRange[0], priceRange[1], productName),
   });
 
   useEffect(() => {
