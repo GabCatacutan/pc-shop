@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       <CartProvider>
-        <div className="mx-64">
+        <div className="lg:mx-32 md:mx-24 sm:mx-8">
           <CustomerHeader />
           <CategoriesProvider>
             <CustomerNavBar />
