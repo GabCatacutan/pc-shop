@@ -9,12 +9,14 @@ function App() {
   return (
     <>
       <CartProvider>
-        <CustomerHeader />
-        <CategoriesProvider>
-          <CustomerNavBar />
-        </CategoriesProvider>
-        {/* ✅ Prevents unnecessary re-renders */}
-        <Outlet />
+        <div className="mx-64">
+          <CustomerHeader />
+          <CategoriesProvider>
+            <CustomerNavBar />
+          </CategoriesProvider>
+          {/* ✅ Prevents unnecessary re-renders */}
+          <Outlet />
+        </div>
         <Footer></Footer>
       </CartProvider>
     </>
